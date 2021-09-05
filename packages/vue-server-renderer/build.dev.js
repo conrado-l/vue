@@ -10,6 +10,7 @@ var he = _interopDefault(require('he'));
 
 var emptyObject = Object.freeze({});
 
+console.log('[Vue SSR] Using dev build');
 // These helpers produce better VM code in JS engines due to their
 // explicitness and function inlining.
 function isUndef (v) {
@@ -6199,8 +6200,6 @@ function createFunction (code, errors) {
 }
 
 function createCompileToFunctionFn (compile) {
-  var cache = Object.create(null);
-
   return function compileToFunctions (
     template,
     options,
@@ -6226,14 +6225,6 @@ function createCompileToFunctionFn (compile) {
           );
         }
       }
-    }
-
-    // check cache
-    var key = options.delimiters
-      ? String(options.delimiters) + template
-      : template;
-    if (cache[key]) {
-      return cache[key]
     }
 
     // compile
@@ -6294,7 +6285,7 @@ function createCompileToFunctionFn (compile) {
       }
     }
 
-    return (cache[key] = res)
+    return res;
   }
 }
 
@@ -8907,7 +8898,7 @@ var TemplateRenderer = function TemplateRenderer (options) {
   this.inject = options.inject !== false;
   // if no template option is provided, the renderer is created
   // as a utility object for rendering assets like preload links and scripts.
-    
+
   var template = options.template;
   this.parsedTemplate = template
     ? typeof template === 'string'
